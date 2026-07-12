@@ -1,0 +1,6 @@
+{
+  "name": "剪映快捷键助手",
+  "description": "一份精美、交互式、响应式的剪映（CapCut）常用快捷键指南，支持 Windows/macOS 双系统切换、虚拟键盘高亮、按键练习和搜索收藏，方便在手机和电脑端随时查阅。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
