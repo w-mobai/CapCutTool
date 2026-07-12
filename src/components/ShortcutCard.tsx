@@ -13,18 +13,18 @@ interface ShortcutCardProps {
   shortcut: Shortcut;
   system: OS;
   isFavorite: boolean;
+  isLocked: boolean;
   onToggleFavorite: (id: string) => void;
-  onHoverStart?: (keys: string[]) => void;
-  onHoverEnd?: () => void;
+  onLock: (id: string) => void;
 }
 
 export default function ShortcutCard({
   shortcut,
   system,
   isFavorite,
+  isLocked,
   onToggleFavorite,
-  onHoverStart,
-  onHoverEnd,
+  onLock,
 }: ShortcutCardProps) {
   const [copied, setCopied] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -42,14 +42,16 @@ export default function ShortcutCard({
   return (
     <div
       id={`shortcut-card-${shortcut.id}`}
-      onMouseEnter={() => onHoverStart?.(keys)}
-      onMouseLeave={() => onHoverEnd?.()}
+      onClick={() => onLock(shortcut.id)}
       className={`
         relative flex flex-col justify-between
-        bg-zinc-900 border border-zinc-800/80 hover:border-zinc-700/80
+        border
         rounded-xl p-4 md:p-5 shadow-sm hover:shadow-md
-        transition-all duration-200 group overflow-hidden
+        transition-all duration-200 group overflow-hidden cursor-pointer
         ${isFavorite ? 'ring-1 ring-amber-500/10' : ''}
+        ${isLocked
+          ? 'bg-amber-500/[0.08] border-amber-400/70 ring-2 ring-amber-400/25 -translate-y-0.5 shadow-[0_12px_32px_rgba(245,158,11,0.14)]'
+          : 'bg-zinc-900 border-zinc-800/80 hover:border-zinc-700/80'}
       `}
     >
       {/* Decorative top ambient color block */}
@@ -64,10 +66,17 @@ export default function ShortcutCard({
       {/* Title & Action controls */}
       <div>
         <div className="flex justify-between items-start gap-2 mb-2">
-          <h4 className="font-bold text-zinc-100 text-sm md:text-base group-hover:text-amber-400 transition-colors">
+          <h4 className={`font-bold text-sm md:text-base transition-colors ${
+            isLocked ? 'text-amber-300' : 'text-zinc-100 group-hover:text-amber-400'
+          }`}>
             {shortcut.name}
           </h4>
           <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+            {isLocked && (
+              <span className="mr-1 rounded-full border border-amber-400/30 bg-amber-400/15 px-2 py-0.5 text-[9px] font-bold tracking-wide text-amber-300">
+                已锁定
+              </span>
+            )}
             <button
               id={`btn-copy-${shortcut.id}`}
               type="button"
@@ -133,7 +142,10 @@ export default function ShortcutCard({
             <button
               id={`btn-expand-tips-${shortcut.id}`}
               type="button"
-              onClick={() => setExpanded(!expanded)}
+              onClick={(event) => {
+                event.stopPropagation();
+                setExpanded(!expanded);
+              }}
               className="flex items-center gap-1 text-[10px] text-zinc-500 hover:text-zinc-400 cursor-pointer transition-all"
             >
               <Sparkles className="w-3 h-3 text-amber-500/80" />

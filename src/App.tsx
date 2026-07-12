@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { OS, CategoryType, Shortcut } from './types';
 import { CATEGORIES, SHORTCUTS_DATA } from './data/shortcuts';
 import Keycap from './components/Keycap';
@@ -30,6 +30,8 @@ import {
   Keyboard,
   Printer,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
   Lightbulb,
   Zap,
 } from 'lucide-react';
@@ -49,7 +51,10 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | 'all'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedKeyFilter, setSelectedKeyFilter] = useState<string | null>(null);
-  const [hoveredKeys, setHoveredKeys] = useState<string[]>([]);
+  const [lockedShortcutId, setLockedShortcutId] = useState<string | null>(null);
+  const [isKeyboardDocked, setIsKeyboardDocked] = useState(false);
+  const [isDockedKeyboardExpanded, setIsDockedKeyboardExpanded] = useState(false);
+  const keyboardSentinelRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [showPractice, setShowPractice] = useState(false);
   const [showProTips, setShowProTips] = useState(true);
@@ -70,6 +75,42 @@ export default function App() {
     } else {
       setShowPractice(false);
     }
+  }, [activeTab]);
+
+  // Collapse the keyboard into a compact sticky HUD after it scrolls past the header.
+  useEffect(() => {
+    const sentinel = keyboardSentinelRef.current;
+    if (!sentinel) return;
+
+    const desktopQuery = window.matchMedia('(min-width: 1024px)');
+    let observer: IntersectionObserver | null = null;
+
+    const syncObserver = () => {
+      observer?.disconnect();
+
+      if (!desktopQuery.matches) {
+        setIsKeyboardDocked(false);
+        setIsDockedKeyboardExpanded(false);
+        return;
+      }
+
+      observer = new IntersectionObserver(
+        ([entry]) => {
+          const docked = !entry.isIntersecting && entry.boundingClientRect.top < 76;
+          setIsKeyboardDocked(docked);
+          if (!docked) setIsDockedKeyboardExpanded(false);
+        },
+        { rootMargin: '-76px 0px 0px 0px', threshold: 0 }
+      );
+      observer.observe(sentinel);
+    };
+
+    syncObserver();
+    desktopQuery.addEventListener('change', syncObserver);
+    return () => {
+      observer?.disconnect();
+      desktopQuery.removeEventListener('change', syncObserver);
+    };
   }, [activeTab]);
 
   const handleHighlightKeysFromTip = (keys: string[]) => {
@@ -141,7 +182,13 @@ export default function App() {
 
   // --- Keyboard filter clicking handler ---
   const handleKeyClickOnKeyboard = (key: string) => {
+    setLockedShortcutId(null);
     setSelectedKeyFilter((prev) => (prev === key ? null : key));
+  };
+
+  const handleShortcutLock = (shortcutId: string) => {
+    setSelectedKeyFilter(null);
+    setLockedShortcutId((prev) => (prev === shortcutId ? null : shortcutId));
   };
 
   // --- Filter and Search Logic ---
@@ -181,6 +228,13 @@ export default function App() {
       return true;
     });
   }, [selectedCategory, selectedKeyFilter, searchQuery, system, favorites]);
+
+  const lockedShortcut = lockedShortcutId
+    ? SHORTCUTS_DATA.find((shortcut) => shortcut.id === lockedShortcutId)
+    : null;
+  const displayedKeys = selectedKeyFilter
+    ? [selectedKeyFilter]
+    : lockedShortcut?.keys[system] || [];
 
   // Count shortcuts in each category for badges
   const categoryCounts = useMemo(() => {
@@ -563,14 +617,74 @@ export default function App() {
 
             {/* Right/Bottom Content Area: Keyboard and Shortcut Lists */}
             <div className="lg:col-span-8 flex flex-col gap-6">
-              {/* Interactive Virtual Keyboard */}
-              <div className="w-full">
-                <VirtualKeyboard
-                  system={system}
-                  activeKeys={hoveredKeys}
-                  selectedKeyFilter={selectedKeyFilter}
-                  onKeyClick={handleKeyClickOnKeyboard}
+              {/* Interactive Virtual Keyboard / compact sticky HUD */}
+              <div className="w-full lg:contents">
+                <div
+                  ref={keyboardSentinelRef}
+                  className="hidden h-px lg:block lg:-mb-6"
+                  aria-hidden="true"
                 />
+                <div className="lg:sticky lg:top-[76px] lg:z-40">
+                  {isKeyboardDocked && !isDockedKeyboardExpanded ? (
+                    <div className="hidden lg:flex min-h-16 items-center gap-4 rounded-2xl border border-amber-500/25 bg-zinc-900/95 px-4 py-3 shadow-2xl shadow-black/40 backdrop-blur-xl animate-fade-in">
+                      <div className="flex min-w-0 flex-1 items-center gap-3">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-500/25 bg-amber-500/10">
+                          <Keyboard className="h-4 w-4 text-amber-400" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="mb-1 text-[10px] font-bold uppercase tracking-[0.16em] text-zinc-500">
+                            {selectedKeyFilter || lockedShortcutId ? '已锁定快捷键' : '当前快捷键'}
+                          </div>
+                          <div className="flex min-h-6 items-center gap-1.5 overflow-x-auto scrollbar-thin">
+                            {displayedKeys.length > 0 ? (
+                              displayedKeys.map((key, index) => (
+                                <React.Fragment key={`${key}-${index}`}>
+                                  {index > 0 && <span className="text-xs font-bold text-zinc-600">+</span>}
+                                  <Keycap value={key} system={system} size="sm" />
+                                </React.Fragment>
+                              ))
+                            ) : (
+                              <span className="truncate text-xs text-zinc-400">
+                                单击下方快捷键卡片，即可锁定并在这里显示
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <button
+                        id="expand-sticky-keyboard"
+                        type="button"
+                        onClick={() => setIsDockedKeyboardExpanded(true)}
+                        className="flex shrink-0 items-center gap-1.5 rounded-lg border border-zinc-700 bg-zinc-800 px-3 py-2 text-xs font-semibold text-zinc-300 transition-colors hover:border-zinc-600 hover:text-amber-400"
+                        aria-label="展开完整键盘"
+                      >
+                        <ChevronDown className="h-3.5 w-3.5" />
+                        展开键盘
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="relative">
+                      <VirtualKeyboard
+                        system={system}
+                        activeKeys={displayedKeys}
+                        selectedKeyFilter={selectedKeyFilter}
+                        onKeyClick={handleKeyClickOnKeyboard}
+                      />
+                      {isKeyboardDocked && (
+                        <button
+                          id="collapse-sticky-keyboard"
+                          type="button"
+                          onClick={() => setIsDockedKeyboardExpanded(false)}
+                          className="absolute right-4 bottom-3 hidden lg:flex items-center gap-1 rounded-md border border-zinc-700 bg-zinc-900 px-2 py-1 text-[10px] font-semibold text-zinc-400 transition-colors hover:text-amber-400"
+                          aria-label="收起完整键盘"
+                        >
+                          <ChevronUp className="h-3 w-3" />
+                          收起键盘
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
 
               {/* View Control & Shortcut Lists Header */}
@@ -661,9 +775,9 @@ export default function App() {
                       shortcut={shortcut}
                       system={system}
                       isFavorite={favorites.includes(shortcut.id)}
+                      isLocked={lockedShortcutId === shortcut.id}
                       onToggleFavorite={handleToggleFavorite}
-                      onHoverStart={(keys) => setHoveredKeys(keys)}
-                      onHoverEnd={() => setHoveredKeys([])}
+                      onLock={handleShortcutLock}
                     />
                   ))}
                 </div>
@@ -688,16 +802,22 @@ export default function App() {
                           return (
                             <tr
                               key={shortcut.id}
-                              onMouseEnter={() => setHoveredKeys(keys)}
-                              onMouseLeave={() => setHoveredKeys([])}
-                              className="hover:bg-zinc-800/45 transition-colors group text-xs text-zinc-300"
+                              onClick={() => handleShortcutLock(shortcut.id)}
+                              className={`transition-colors group text-xs text-zinc-300 cursor-pointer ${
+                                lockedShortcutId === shortcut.id
+                                  ? 'bg-amber-500/10 outline-1 -outline-offset-1 outline-amber-500/30'
+                                  : 'hover:bg-zinc-800/45'
+                              }`}
                             >
                               {/* Star column */}
                               <td className="py-3 px-4 text-center">
                                 <button
                                   id={`table-fav-${shortcut.id}`}
                                   type="button"
-                                  onClick={() => handleToggleFavorite(shortcut.id)}
+                                  onClick={(event) => {
+                                    event.stopPropagation();
+                                    handleToggleFavorite(shortcut.id);
+                                  }}
                                   className="text-zinc-600 hover:text-amber-400 cursor-pointer"
                                 >
                                   <Star

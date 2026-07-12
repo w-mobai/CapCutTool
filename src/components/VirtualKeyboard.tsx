@@ -195,7 +195,12 @@ export default function VirtualKeyboard({
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
           <span className="text-xs text-zinc-400 font-medium">
-            交互式虚拟键盘 {selectedKeyFilter ? `(已过滤: ${selectedKeyFilter})` : '(悬停快捷键或点击单键过滤)'}
+            交互式虚拟键盘{' '}
+            {selectedKeyFilter
+              ? `(已锁定: ${selectedKeyFilter})`
+              : activeKeys.length > 0
+                ? `(已锁定: ${activeKeys.join(' + ')})`
+                : '(单击卡片锁定组合，或点击单键过滤)'}
           </span>
         </div>
         {selectedKeyFilter && (
