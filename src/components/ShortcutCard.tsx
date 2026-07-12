@@ -48,9 +48,9 @@ export default function ShortcutCard({
         border
         rounded-xl p-4 md:p-5 shadow-sm hover:shadow-md
         transition-all duration-200 group overflow-hidden cursor-pointer
-        ${isFavorite ? 'ring-1 ring-amber-500/10' : ''}
+        ${isFavorite && !isLocked ? 'ring-1 ring-amber-500/10' : ''}
         ${isLocked
-          ? 'bg-amber-500/[0.08] border-amber-400/70 ring-2 ring-amber-400/25 -translate-y-0.5 shadow-[0_12px_32px_rgba(245,158,11,0.14)]'
+          ? 'bg-amber-500/[0.08] border-transparent -translate-y-0.5 shadow-[0_12px_32px_rgba(245,158,11,0.14)]'
           : 'bg-zinc-900 border-zinc-800/80 hover:border-zinc-700/80'}
       `}
     >

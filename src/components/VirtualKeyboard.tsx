@@ -9,6 +9,7 @@ import { OS } from '../types';
 
 interface VirtualKeyboardProps {
   system: OS;
+  isDocked?: boolean;
   // Currently active keys to highlight (e.g., from hovering a shortcut)
   activeKeys: string[];
   // Selected key filter (filtering shortcuts by key)
@@ -18,6 +19,7 @@ interface VirtualKeyboardProps {
 
 export default function VirtualKeyboard({
   system,
+  isDocked = false,
   activeKeys,
   selectedKeyFilter,
   onKeyClick,
@@ -190,7 +192,14 @@ export default function VirtualKeyboard({
   };
 
   return (
-    <div id="virtual-keyboard-container" className="w-full bg-zinc-900 border border-zinc-800 rounded-xl p-4 shadow-xl">
+    <div
+      id="virtual-keyboard-container"
+      className={`w-full rounded-xl border p-4 transition-colors duration-200 ${
+        isDocked
+          ? 'border-white/20 bg-white/[0.12] shadow-2xl shadow-black/45 backdrop-blur-xl'
+          : 'border-zinc-800 bg-zinc-900 shadow-xl'
+      }`}
+    >
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>

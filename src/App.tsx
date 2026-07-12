@@ -626,7 +626,7 @@ export default function App() {
                 />
                 <div className="lg:sticky lg:top-[76px] lg:z-40">
                   {isKeyboardDocked && !isDockedKeyboardExpanded ? (
-                    <div className="hidden lg:flex min-h-16 items-center gap-4 rounded-2xl border border-amber-500/25 bg-zinc-900/95 px-4 py-3 shadow-2xl shadow-black/40 backdrop-blur-xl animate-fade-in">
+                    <div className="hidden lg:flex min-h-16 items-center gap-4 rounded-2xl border border-white/20 bg-white/[0.12] px-4 py-3 shadow-2xl shadow-black/45 backdrop-blur-xl animate-fade-in">
                       <div className="flex min-w-0 flex-1 items-center gap-3">
                         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-amber-500/25 bg-amber-500/10">
                           <Keyboard className="h-4 w-4 text-amber-400" />
@@ -666,6 +666,7 @@ export default function App() {
                     <div className="relative">
                       <VirtualKeyboard
                         system={system}
+                        isDocked={isKeyboardDocked}
                         activeKeys={displayedKeys}
                         selectedKeyFilter={selectedKeyFilter}
                         onKeyClick={handleKeyClickOnKeyboard}
