@@ -99,7 +99,7 @@ export default function ProTipsView({
               剪映核心设置与避坑秘籍
             </h2>
             <p className="text-zinc-400 text-xs mt-1.5 leading-relaxed max-w-2xl">
-              结合子牧老师入门课分享的内部经验。从“防止C盘撑爆”、“人声智能降噪音质不损”，到“1.6倍速下合并复合片段防掉帧”等，拒绝野路子，建立专业级的视频后期工作流。
+              从全局设置、素材预处理到粗剪筛选、气口和帧级精剪，将课程里的操作步骤与判断标准整理成可随时查看的实战工作流。
             </p>
           </div>
           <div className="hidden lg:flex items-center gap-2 px-4 py-2.5 bg-zinc-950/60 border border-zinc-850 rounded-xl">
@@ -186,7 +186,11 @@ export default function ProTipsView({
                         ? '🎵 音频素材'
                         : tip.category === 'video'
                         ? '🎬 视频素材'
-                        : '⚡ 粗剪提效'}
+                        : tip.category === 'efficiency'
+                        ? '⚡ 操作提效'
+                        : tip.category === 'rough-cut'
+                        ? '🧱 粗剪筛选'
+                        : '🎯 精剪节奏'}
                     </span>
                   </div>
 

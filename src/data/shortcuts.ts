@@ -235,6 +235,22 @@ export const SHORTCUTS_DATA: Shortcut[] = [
     tips: '用于精确查找动作细节或音频声波起点。',
   },
   {
+    id: 'prev-ten-frames',
+    name: '向左移动 10 帧',
+    description: '播放头向左一次移动十帧，快速接近气口或剪切点。',
+    category: 'playback',
+    keys: { windows: ['Shift', 'Left'], macos: ['Shift', 'Left'] },
+    tips: '先大步接近目标，再放开 Shift 用左右键逐帧微调。',
+  },
+  {
+    id: 'next-ten-frames',
+    name: '向右移动 10 帧',
+    description: '播放头向右一次移动十帧，快速接近气口或剪切点。',
+    category: 'playback',
+    keys: { windows: ['Shift', 'Right'], macos: ['Shift', 'Right'] },
+    tips: '适合与智能字幕、放大后的波形配合使用。',
+  },
+  {
     id: 'prev-clip',
     name: '跳转到上一个剪辑点',
     description: '将播放轴直接快速移动到左侧相邻的分割点（剪切位置）。',
