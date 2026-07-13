@@ -19,7 +19,7 @@ import {
   Scissors,
   Play,
   Kanban,
-  Type,
+  SlidersHorizontal,
   FolderOpen,
   Star,
   Grid,
@@ -34,10 +34,18 @@ import {
   ChevronUp,
   Lightbulb,
   Zap,
+  Sun,
+  Moon,
 } from 'lucide-react';
+
+type Theme = 'light' | 'dark';
 
 export default function App() {
   // --- States ---
+  const [theme, setTheme] = useState<Theme>(() => {
+    return localStorage.getItem('jianying_shortcut_theme') === 'light' ? 'light' : 'dark';
+  });
+
   const [system, setSystem] = useState<OS>(() => {
     const saved = localStorage.getItem('jianying_shortcut_os');
     return (saved as OS) || 'windows';
@@ -138,6 +146,13 @@ export default function App() {
     localStorage.setItem('jianying_shortcut_favs', JSON.stringify(favorites));
   }, [favorites]);
 
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle('dark', theme === 'dark');
+    root.style.colorScheme = theme;
+    localStorage.setItem('jianying_shortcut_theme', theme);
+  }, [theme]);
+
   // --- Category Map for Icons ---
   const getCategoryIcon = (catId: string) => {
     switch (catId) {
@@ -148,7 +163,7 @@ export default function App() {
       case 'timeline':
         return <Kanban className="w-4 h-4" />;
       case 'text-effects':
-        return <Type className="w-4 h-4" />;
+        return <SlidersHorizontal className="w-4 h-4" />;
       case 'file-global':
         return <FolderOpen className="w-4 h-4" />;
       default:
@@ -159,17 +174,34 @@ export default function App() {
   const getCategoryColor = (catId: string) => {
     switch (catId) {
       case 'editing':
-        return 'border-amber-500 text-amber-400 bg-amber-500/10';
+        return 'border-chart-3 text-chart-3 bg-chart-3/10';
       case 'playback':
-        return 'border-sky-500 text-sky-400 bg-sky-500/10';
+        return 'border-chart-2 text-chart-2 bg-chart-2/10';
       case 'timeline':
-        return 'border-emerald-500 text-emerald-400 bg-emerald-500/10';
+        return 'border-chart-5 text-chart-5 bg-chart-5/10';
       case 'text-effects':
-        return 'border-purple-500 text-purple-400 bg-purple-500/10';
+        return 'border-chart-4 text-chart-4 bg-chart-4/10';
       case 'file-global':
-        return 'border-indigo-500 text-indigo-400 bg-indigo-500/10';
+        return 'border-chart-1 text-chart-1 bg-chart-1/10';
       default:
         return 'border-zinc-500 text-zinc-400 bg-zinc-500/10';
+    }
+  };
+
+  const getCategorySelectedColor = (catId: string) => {
+    switch (catId) {
+      case 'editing':
+        return 'bg-chart-3/10 border-chart-3 text-zinc-100';
+      case 'playback':
+        return 'bg-chart-2/10 border-chart-2 text-zinc-100';
+      case 'timeline':
+        return 'bg-chart-5/10 border-chart-5 text-zinc-100';
+      case 'text-effects':
+        return 'bg-chart-4/10 border-chart-4 text-zinc-100';
+      case 'file-global':
+        return 'bg-chart-1/10 border-chart-1 text-zinc-100';
+      default:
+        return 'bg-zinc-800 border-border text-zinc-100';
     }
   };
 
@@ -255,11 +287,11 @@ export default function App() {
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 font-sans antialiased scrollbar-thin">
       {/* Top Brand Nav Bar */}
-      <header className="border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3.5 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <header className="border-b border-border bg-zinc-950/80 backdrop-blur-md sticky top-0 z-50 px-4 py-3.5 max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
         {/* Brand Logo & Name */}
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-linear-to-tr from-amber-500 via-orange-500 to-rose-600 p-[1.5px] shadow-lg shadow-amber-500/10 flex items-center justify-center">
-            <div className="w-full h-full rounded-[10px] bg-zinc-950 flex items-center justify-center font-bold text-lg text-white">
+            <div className="w-full h-full rounded-[10px] bg-zinc-950 flex items-center justify-center font-bold text-lg text-zinc-100">
               剪
             </div>
           </div>
@@ -281,7 +313,7 @@ export default function App() {
         {/* System & Mode Controls */}
         <div className="flex flex-wrap items-center gap-3">
           {/* OS Switcher */}
-          <div className="flex rounded-xl p-0.5 bg-zinc-900 border border-zinc-800">
+          <div className="flex rounded-xl p-0.5 bg-zinc-900 border border-border">
             <button
               id="switch-windows"
               type="button"
@@ -321,15 +353,15 @@ export default function App() {
           </div>
 
           {/* Tab Segmented Switcher */}
-          <div className="flex rounded-xl p-0.5 bg-zinc-900 border border-zinc-800">
+          <div className="flex rounded-xl p-0.5 bg-zinc-900 border border-border">
             <button
               id="tab-btn-shortcuts"
               type="button"
               onClick={() => setActiveTab('shortcuts')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
                 ${
                   activeTab === 'shortcuts'
-                    ? 'bg-zinc-800 text-amber-400 border-zinc-700 shadow-sm'
+                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }
               `}
@@ -341,29 +373,25 @@ export default function App() {
               id="tab-btn-tips"
               type="button"
               onClick={() => setActiveTab('tips')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border relative
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
                 ${
                   activeTab === 'tips'
-                    ? 'bg-zinc-800 text-amber-400 border-zinc-700 shadow-sm'
+                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }
               `}
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>剪辑避坑秘籍</span>
-              <span className="absolute -top-1 -right-0.5 flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500"></span>
-              </span>
             </button>
             <button
               id="tab-btn-practice"
               type="button"
               onClick={() => setActiveTab('practice')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
                 ${
                   activeTab === 'practice'
-                    ? 'bg-zinc-800 text-amber-400 border-zinc-700 shadow-sm'
+                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
                     : 'text-zinc-400 hover:text-zinc-200 border-transparent'
                 }
               `}
@@ -372,6 +400,24 @@ export default function App() {
               <span>实战练习场</span>
             </button>
           </div>
+
+          <button
+            id="switch-theme"
+            type="button"
+            onClick={() => setTheme((current) => (current === 'dark' ? 'light' : 'dark'))}
+            aria-label={`切换到${theme === 'dark' ? '浅色' : '深色'}主题`}
+            title={`切换到${theme === 'dark' ? '浅色' : '深色'}主题`}
+            className="group flex items-center gap-2 rounded-xl border border-border bg-zinc-900 px-3 py-2 text-xs font-semibold text-zinc-400 shadow-sm transition-all hover:border-amber-500 hover:text-amber-400"
+          >
+            <span className="relative flex h-5 w-5 items-center justify-center overflow-hidden rounded-full bg-zinc-800 text-amber-400">
+              {theme === 'dark' ? (
+                <Moon className="h-3.5 w-3.5" />
+              ) : (
+                <Sun className="h-3.5 w-3.5" />
+              )}
+            </span>
+            <span>{theme === 'dark' ? '深色' : '浅色'}</span>
+          </button>
         </div>
       </header>
 
@@ -414,7 +460,7 @@ export default function App() {
             {/* Left/Top Sidebar: Search, Categories, Pro Tips */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               {/* Search Card */}
-              <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl p-5 shadow-sm">
+              <div className="bg-zinc-900 border border-border rounded-2xl p-5 shadow-sm">
                 <h3 className="font-bold text-zinc-200 text-sm mb-3.5 flex items-center gap-2">
                   <Search className="w-4 h-4 text-zinc-400" />
                   智能搜索过滤
@@ -428,7 +474,7 @@ export default function App() {
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="输入功能、描述或按键 (如 Ctrl)"
-                    className="w-full bg-zinc-950 border border-zinc-800 hover:border-zinc-700 focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/20 text-zinc-100 text-xs px-3.5 py-2.5 rounded-xl transition-all outline-hidden pr-8 font-medium"
+                    className="w-full bg-zinc-950 border border-border hover:border-amber-500/60 focus:border-amber-500/60 focus:ring-1 focus:ring-amber-500/20 text-zinc-100 text-xs px-3.5 py-2.5 rounded-xl transition-all outline-hidden pr-8 font-medium"
                   />
                   {searchQuery ? (
                     <button
@@ -450,7 +496,7 @@ export default function App() {
               </div>
 
               {/* Category selector */}
-              <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl p-5 shadow-sm">
+              <div className="bg-zinc-900 border border-border rounded-2xl p-5 shadow-sm">
                 <h3 className="font-bold text-zinc-200 text-sm mb-3.5 flex items-center gap-2">
                   <BookOpen className="w-4 h-4 text-zinc-400" />
                   按功能类别筛选
@@ -531,7 +577,7 @@ export default function App() {
                         className={`flex items-center justify-between w-full px-3.5 py-2.5 rounded-xl text-xs font-semibold tracking-wide transition-all cursor-pointer border
                           ${
                             isSelected
-                              ? 'bg-zinc-800 border-zinc-700 text-zinc-100'
+                              ? getCategorySelectedColor(cat.id)
                               : 'bg-zinc-950/40 border-transparent hover:border-zinc-800 text-zinc-400 hover:text-zinc-200'
                           }
                         `}
@@ -552,7 +598,7 @@ export default function App() {
               </div>
 
               {/* Pro Editing Workflows & Tips */}
-              <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl p-5 shadow-sm">
+              <div className="bg-zinc-900 border border-border rounded-2xl p-5 shadow-sm">
                 <div className="flex justify-between items-center mb-3">
                   <h3 className="font-bold text-zinc-200 text-sm flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
@@ -570,7 +616,7 @@ export default function App() {
 
                 {showProTips && (
                   <div className="flex flex-col gap-3.5 text-xs animate-fade-in">
-                    <div className="bg-zinc-950/40 border border-zinc-850 rounded-xl p-3">
+                    <div className="bg-zinc-950/40 border border-border/50 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 text-amber-400 font-bold mb-1">
                         <Lightbulb className="w-3.5 h-3.5 text-amber-400" />
                         <span>Q/W 高效粗剪法</span>
@@ -580,7 +626,7 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="bg-zinc-950/40 border border-zinc-850 rounded-xl p-3">
+                    <div className="bg-zinc-950/40 border border-border/50 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 text-sky-400 font-bold mb-1">
                         <Lightbulb className="w-3.5 h-3.5 text-sky-400" />
                         <span>听歌卡点技巧</span>
@@ -590,7 +636,7 @@ export default function App() {
                       </p>
                     </div>
 
-                    <div className="bg-zinc-950/40 border border-zinc-850 rounded-xl p-3">
+                    <div className="bg-zinc-950/40 border border-border/50 rounded-xl p-3">
                       <div className="flex items-center gap-1.5 text-emerald-400 font-bold mb-1">
                         <Lightbulb className="w-3.5 h-3.5 text-emerald-400" />
                         <span>一键缩放重置</span>
@@ -689,7 +735,7 @@ export default function App() {
               </div>
 
               {/* View Control & Shortcut Lists Header */}
-              <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
+              <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-sm">
                 <div className="flex items-center gap-2">
                   <div className="text-sm font-bold text-zinc-200">
                     {selectedCategory === 'favorites' ? '我的收藏库' : '快捷键对照清单'}
@@ -742,7 +788,7 @@ export default function App() {
               {/* Shortcuts Results List container */}
               {filteredShortcuts.length === 0 ? (
                 /* Empty State */
-                <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl p-12 text-center flex flex-col items-center justify-center">
+                <div className="bg-zinc-900 border border-border rounded-2xl p-12 text-center flex flex-col items-center justify-center">
                   <div className="w-12 h-12 rounded-full bg-zinc-800/80 flex items-center justify-center text-zinc-500 mb-4 text-xl">
                     ？
                   </div>
@@ -784,7 +830,7 @@ export default function App() {
                 </div>
               ) : (
                 /* Compact Table View */
-                <div className="bg-zinc-900 border border-zinc-800/80 rounded-2xl overflow-hidden shadow-sm">
+                <div className="bg-zinc-900 border border-border rounded-2xl overflow-hidden shadow-sm">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">
                       <thead>
@@ -873,7 +919,7 @@ export default function App() {
       </main>
 
       {/* Footer info brand */}
-      <footer className="border-t border-zinc-900 mt-16 bg-zinc-950 py-8 text-center text-xs text-zinc-600">
+      <footer className="border-t border-border mt-16 bg-zinc-950 py-8 text-center text-xs text-zinc-600">
         <div className="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-left">
             <div className="font-semibold text-zinc-500">剪映（CapCut）常用快捷键快速查找工具</div>

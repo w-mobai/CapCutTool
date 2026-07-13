@@ -99,20 +99,20 @@ export default function Keycap({
   let borderClasses = '';
 
   if (isHighlighted) {
-    // Elegant warm sunset or neon highlighting depending on theme
+    // Soft Pop purple highlight in both themes.
     bgClasses = 'bg-gradient-to-b from-amber-400 to-amber-500 shadow-amber-300/30';
     textClasses = 'text-amber-950 font-bold';
     borderClasses = 'border-amber-600';
   } else if (isSpecialKey) {
-    // Modifier keys (darker/cooler grey)
-    bgClasses = 'bg-gradient-to-b from-zinc-700 to-zinc-800 shadow-black/25';
-    textClasses = 'text-zinc-200 font-medium';
-    borderClasses = 'border-zinc-900';
+    // Pale teal modifier keys in light mode, graphite keys in dark mode.
+    bgClasses = 'bg-gradient-to-b from-secondary/20 to-secondary/45 shadow-black/8 dark:from-zinc-700 dark:to-zinc-800 dark:shadow-black/25';
+    textClasses = 'text-muted-foreground dark:text-zinc-200 font-semibold';
+    borderClasses = 'border-secondary dark:border-zinc-900';
   } else {
-    // Standard alphanumeric keys (light mechanical theme)
-    bgClasses = 'bg-gradient-to-b from-zinc-50 to-zinc-150 shadow-black/10';
-    textClasses = 'text-zinc-800 font-bold';
-    borderClasses = 'border-zinc-300';
+    // Clean paper keycaps in light mode, bright mechanical keys in dark mode.
+    bgClasses = 'bg-gradient-to-b from-card to-muted shadow-black/8 dark:from-zinc-50 dark:to-zinc-150 dark:shadow-black/10';
+    textClasses = 'text-foreground dark:text-zinc-800 font-bold';
+    borderClasses = 'border-border/70 dark:border-zinc-300';
   }
 
   const currentSize = sizeClasses[size];
@@ -130,7 +130,7 @@ export default function Keycap({
         ${currentSize.padding}
         ${bgClasses}
         ${textClasses}
-        border border-x-zinc-300/30 border-t-zinc-300/20
+        border border-x-border/35 border-t-card dark:border-x-zinc-300/30 dark:border-t-zinc-300/20
         ${currentSize.border} ${borderClasses}
         shadow-sm
         transition-all duration-75 select-none

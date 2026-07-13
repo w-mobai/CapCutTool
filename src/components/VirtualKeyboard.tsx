@@ -149,7 +149,7 @@ export default function VirtualKeyboard({
                 ? 'bg-amber-400 border-amber-600 text-amber-950 font-bold scale-95 shadow-inner' 
                 : upFiltered
                 ? 'bg-amber-500 border-amber-600 text-amber-950 font-bold scale-95'
-                : 'bg-gradient-to-b from-zinc-50 to-zinc-150 border-zinc-300 text-zinc-700 hover:bg-zinc-200'
+                : 'bg-gradient-to-b from-card to-muted border-border/70 text-foreground hover:brightness-95 dark:from-zinc-50 dark:to-zinc-150 dark:border-zinc-300 dark:text-zinc-700'
               }
             `}
           >
@@ -164,7 +164,7 @@ export default function VirtualKeyboard({
                 ? 'bg-amber-400 border-amber-600 text-amber-950 font-bold scale-95 shadow-inner' 
                 : downFiltered
                 ? 'bg-amber-500 border-amber-600 text-amber-950 font-bold scale-95'
-                : 'bg-gradient-to-b from-zinc-50 to-zinc-150 border-zinc-300 text-zinc-700 hover:bg-zinc-200'
+                : 'bg-gradient-to-b from-card to-muted border-border/70 text-foreground hover:brightness-95 dark:from-zinc-50 dark:to-zinc-150 dark:border-zinc-300 dark:text-zinc-700'
               }
             `}
           >
@@ -197,7 +197,7 @@ export default function VirtualKeyboard({
       className={`w-full rounded-xl border p-4 transition-colors duration-200 ${
         isDocked
           ? 'border-white/20 bg-white/[0.12] shadow-2xl shadow-black/45 backdrop-blur-xl'
-          : 'border-zinc-800 bg-zinc-900 shadow-xl'
+          : 'border-border bg-zinc-900 shadow-xl'
       }`}
     >
       <div className="flex justify-between items-center mb-3">
@@ -226,7 +226,7 @@ export default function VirtualKeyboard({
 
       {/* Overflow wrapper for mobile viewport styling */}
       <div className="overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent">
-        <div className="flex flex-col gap-1 min-w-[620px] max-w-full mx-auto select-none p-1 bg-zinc-950 rounded-lg border border-zinc-800/80">
+        <div className="flex flex-col gap-1 min-w-[620px] max-w-full mx-auto select-none p-1 bg-zinc-950 rounded-lg border border-border/60">
           {/* Row 1 */}
           <div className="flex gap-1 w-full">{row1.map(renderKey)}</div>
           {/* Row 2 */}
@@ -242,11 +242,11 @@ export default function VirtualKeyboard({
       
       <div className="flex flex-wrap gap-x-6 gap-y-1.5 mt-3 text-[11px] text-zinc-500 px-1 border-t border-zinc-800/50 pt-2.5">
         <div className="flex items-center gap-1.5">
-          <span className="inline-block w-2 h-2 rounded-sm bg-zinc-100 border border-zinc-300"></span>
+          <span className="inline-block w-2 h-2 rounded-sm bg-card border border-border"></span>
           <span>普通按键</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <span className="inline-block w-2 h-2 rounded-sm bg-zinc-700"></span>
+          <span className="inline-block w-2 h-2 rounded-sm bg-secondary/40 border border-secondary dark:bg-zinc-700 dark:border-zinc-700"></span>
           <span>系统功能修饰键</span>
         </div>
         <div className="flex items-center gap-1.5">

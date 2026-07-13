@@ -1,10 +1,143 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
-@theme {
-  --font-sans: "Inter", "Noto Sans SC", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: oklch(0.9789 0.0082 121.6272);
+  --foreground: oklch(0 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0.5106 0.2301 276.9656);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.7038 0.123 182.5025);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.9551 0 0);
+  --muted-foreground: oklch(0.3211 0 0);
+  --accent: oklch(0.7686 0.1647 70.0804);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.6368 0.2078 25.3313);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0 0 0);
+  --input: oklch(0.5555 0 0);
+  --ring: oklch(0.7853 0.1041 274.7134);
+  --chart-1: oklch(0.5106 0.2301 276.9656);
+  --chart-2: oklch(0.7038 0.123 182.5025);
+  --chart-3: oklch(0.7686 0.1647 70.0804);
+  --chart-4: oklch(0.6559 0.2118 354.3084);
+  --chart-5: oklch(0.7227 0.192 149.5793);
+  --radius: 1rem;
+  --tracking-normal: normal;
+}
+
+.dark {
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.2455 0.0217 257.2823);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.2455 0.0217 257.2823);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.6801 0.1583 276.9349);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.7845 0.1325 181.912);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.3211 0 0);
+  --muted-foreground: oklch(0.8452 0 0);
+  --accent: oklch(0.879 0.1534 91.6054);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.7106 0.1661 22.2162);
+  --destructive-foreground: oklch(0 0 0);
+  --border: oklch(0.4459 0 0);
+  --input: oklch(1 0 0);
+  --ring: oklch(0.6801 0.1583 276.9349);
+  --chart-1: oklch(0.6801 0.1583 276.9349);
+  --chart-2: oklch(0.7845 0.1325 181.912);
+  --chart-3: oklch(0.879 0.1534 91.6054);
+  --chart-4: oklch(0.7253 0.1752 349.7607);
+  --chart-5: oklch(0.8003 0.1821 151.711);
+}
+
+@theme inline {
+  --font-sans: "DM Sans", "Noto Sans SC", sans-serif;
+  --font-mono: "Space Mono", monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Compatibility bridge for the existing zinc/amber utility classes. */
+  --color-zinc-50: var(--foreground);
+  --color-zinc-100: var(--foreground);
+  --color-zinc-150: color-mix(in oklab, var(--foreground) 92%, var(--background));
+  --color-zinc-200: color-mix(in oklab, var(--foreground) 88%, var(--background));
+  --color-zinc-300: color-mix(in oklab, var(--foreground) 78%, var(--background));
+  --color-zinc-400: var(--muted-foreground);
+  --color-zinc-500: color-mix(in oklab, var(--muted-foreground) 78%, var(--background));
+  --color-zinc-600: color-mix(in oklab, var(--muted-foreground) 62%, var(--background));
+  --color-zinc-700: var(--border);
+  --color-zinc-750: color-mix(in oklab, var(--border) 78%, var(--card));
+  --color-zinc-800: var(--muted);
+  --color-zinc-850: color-mix(in oklab, var(--card) 80%, var(--border));
+  --color-zinc-900: var(--card);
+  --color-zinc-950: var(--background);
+
+  --color-amber-300: var(--primary);
+  --color-amber-400: var(--primary);
+  --color-amber-500: var(--primary);
+  --color-amber-600: var(--primary);
+  --color-amber-950: var(--primary-foreground);
+  --color-sky-400: var(--chart-2);
+  --color-sky-500: var(--chart-2);
+  --color-emerald-400: var(--chart-5);
+  --color-emerald-500: var(--chart-5);
+  --color-purple-400: var(--chart-1);
+  --color-purple-500: var(--chart-1);
+  --color-indigo-400: var(--chart-1);
+  --color-indigo-500: var(--chart-1);
+  --color-orange-500: var(--chart-3);
+  --color-rose-500: var(--chart-4);
+  --color-rose-600: var(--chart-4);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    background: var(--background);
+  }
+
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    letter-spacing: var(--tracking-normal);
+    transition: background-color 180ms ease, color 180ms ease;
+  }
 }
 
 @layer utilities {
@@ -17,11 +150,11 @@
     background: transparent;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb {
-    background-color: #3f3f46;
+    background-color: color-mix(in oklab, var(--muted-foreground) 55%, transparent);
     border-radius: 9999px;
   }
   .scrollbar-thin::-webkit-scrollbar-thumb:hover {
-    background-color: #52525b;
+    background-color: var(--muted-foreground);
   }
 }
 

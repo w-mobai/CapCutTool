@@ -179,7 +179,7 @@ export default function PracticeMode({ shortcuts, system, onClose }: PracticeMod
 
   if (pool.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center p-8 bg-zinc-900 border border-zinc-800 rounded-2xl text-center">
+      <div className="flex flex-col items-center justify-center p-8 bg-zinc-900 border border-border rounded-2xl text-center">
         <AlertCircle className="w-12 h-12 text-zinc-500 mb-2" />
         <p className="text-zinc-400">无可练习的快捷键数据。</p>
       </div>
@@ -187,7 +187,7 @@ export default function PracticeMode({ shortcuts, system, onClose }: PracticeMod
   }
 
   return (
-    <div id="practice-mode-card" className="bg-zinc-900 border border-zinc-800 rounded-2xl p-5 md:p-8 shadow-xl max-w-3xl mx-auto">
+    <div id="practice-mode-card" className="bg-zinc-900 border border-border rounded-2xl p-5 md:p-8 shadow-xl max-w-3xl mx-auto">
       {/* Header Stats */}
       <div className="flex justify-between items-center pb-4 border-b border-zinc-800/80 mb-6">
         <div className="flex items-center gap-2">
@@ -209,7 +209,7 @@ export default function PracticeMode({ shortcuts, system, onClose }: PracticeMod
       </div>
 
       {/* Main Question Card */}
-      <div className="bg-zinc-950 border border-zinc-800 rounded-xl p-6 md:p-8 text-center relative overflow-hidden mb-6">
+      <div className="bg-zinc-950 border border-border rounded-xl p-6 md:p-8 text-center relative overflow-hidden mb-6">
         <div className="absolute top-0 left-0 w-1.5 h-full bg-linear-to-b from-amber-500 to-orange-500"></div>
         
         <span className="text-xs text-amber-500 font-semibold tracking-wider uppercase">请按下或拼写对应的快捷键组合</span>
@@ -272,7 +272,7 @@ export default function PracticeMode({ shortcuts, system, onClose }: PracticeMod
 
       {/* On-screen key constructer toolbox */}
       {feedback === 'idle' && (
-        <div className="bg-zinc-950/50 border border-zinc-800/60 rounded-xl p-4 mb-6">
+        <div className="bg-zinc-950/50 border border-border/55 rounded-xl p-4 mb-6">
           <div className="text-xs text-zinc-400 font-semibold mb-3 flex items-center gap-1.5">
             <HelpCircle className="w-3.5 h-3.5 text-zinc-400" />
             手机端或没有键盘？在这里点击拼装你的答案组合：
