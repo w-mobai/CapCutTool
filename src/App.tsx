@@ -11,6 +11,7 @@ import VirtualKeyboard from './components/VirtualKeyboard';
 import ShortcutCard from './components/ShortcutCard';
 import PracticeMode from './components/PracticeMode';
 import ProTipsView from './components/ProTipsView';
+import AiMediaView from './components/AiMediaView';
 import {
   Search,
   X,
@@ -36,6 +37,7 @@ import {
   Zap,
   Sun,
   Moon,
+  BrainCircuit,
 } from 'lucide-react';
 
 type Theme = 'light' | 'dark';
@@ -66,7 +68,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<'grid' | 'table'>('grid');
   const [showPractice, setShowPractice] = useState(false);
   const [showProTips, setShowProTips] = useState(true);
-  const [activeTab, setActiveTab] = useState<'shortcuts' | 'tips' | 'practice'>('shortcuts');
+  const [activeTab, setActiveTab] = useState<'shortcuts' | 'tips' | 'ai-media' | 'practice'>('shortcuts');
 
   // Sync activeTab with showPractice to maintain compatibility
   useEffect(() => {
@@ -370,21 +372,6 @@ export default function App() {
               <span>快捷键对照</span>
             </button>
             <button
-              id="tab-btn-tips"
-              type="button"
-              onClick={() => setActiveTab('tips')}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
-                ${
-                  activeTab === 'tips'
-                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-200 border-transparent'
-                }
-              `}
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>剪辑避坑秘籍</span>
-            </button>
-            <button
               id="tab-btn-practice"
               type="button"
               onClick={() => setActiveTab('practice')}
@@ -398,6 +385,36 @@ export default function App() {
             >
               <Zap className="w-3.5 h-3.5" />
               <span>实战练习场</span>
+            </button>
+            <button
+              id="tab-btn-tips"
+              type="button"
+              onClick={() => setActiveTab('tips')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
+                ${
+                  activeTab === 'tips'
+                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200 border-transparent'
+                }
+              `}
+            >
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>剪辑避坑秘籍（子牧）</span>
+            </button>
+            <button
+              id="tab-btn-ai-media"
+              type="button"
+              onClick={() => setActiveTab('ai-media')}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold tracking-wide cursor-pointer transition-all border focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary
+                ${
+                  activeTab === 'ai-media'
+                    ? 'bg-zinc-800 text-amber-400 border-transparent shadow-sm'
+                    : 'text-zinc-400 hover:text-zinc-200 border-transparent'
+                }
+              `}
+            >
+              <BrainCircuit className="w-3.5 h-3.5" />
+              <span>AI 自媒体（林纸巾）</span>
             </button>
           </div>
 
@@ -454,6 +471,8 @@ export default function App() {
               onLocateShortcut={handleLocateShortcut}
             />
           </div>
+        ) : activeTab === 'ai-media' ? (
+          <AiMediaView />
         ) : (
           /* Classical Cheat Sheet List Mode */
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 animate-fade-in">

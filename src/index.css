@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;600;700;800;900&family=Noto+Serif+SC:wght@800;900&family=Space+Mono:wght@400;700&display=swap');
 
 @import "tailwindcss";
 
@@ -63,6 +63,7 @@
 @theme inline {
   --font-sans: "DM Sans", "Noto Sans SC", sans-serif;
   --font-mono: "Space Mono", monospace;
+  --font-serif: "Noto Serif SC", serif;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -130,6 +131,7 @@
 
   html {
     background: var(--background);
+    scroll-behavior: smooth;
   }
 
   body {
@@ -171,4 +173,150 @@
 
 .animate-fade-in {
   animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.ai-media-shell {
+  --ai-grid: color-mix(in oklab, var(--border) 22%, transparent);
+  background-image:
+    linear-gradient(var(--ai-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--ai-grid) 1px, transparent 1px);
+  background-size: 44px 44px;
+  background-position: -1px -1px;
+}
+
+.ai-media-hero {
+  background-image:
+    radial-gradient(circle at 72% 18%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 33%),
+    linear-gradient(145deg, var(--card), color-mix(in oklab, var(--card) 86%, var(--background)));
+}
+
+.course-catalog-hero {
+  background-image:
+    radial-gradient(circle at 78% 28%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 32%),
+    linear-gradient(138deg, var(--card), color-mix(in oklab, var(--card) 84%, var(--background)));
+}
+
+.course-catalog-hero h2 {
+  font-family: "Noto Serif SC", serif;
+}
+
+.course-library-card {
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.course-library-card:hover {
+  border-color: color-mix(in oklab, var(--primary) 52%, var(--border));
+  box-shadow: 0 28px 70px color-mix(in oklab, var(--primary) 9%, transparent);
+  transform: translateY(-3px);
+}
+
+.course-cover {
+  background:
+    radial-gradient(circle at 76% 24%, color-mix(in oklab, var(--primary) 28%, transparent), transparent 31%),
+    linear-gradient(145deg, oklch(0.94 0.09 92), oklch(0.84 0.14 76));
+}
+
+.dark .course-cover {
+  background:
+    radial-gradient(circle at 76% 24%, color-mix(in oklab, var(--primary) 42%, transparent), transparent 31%),
+    linear-gradient(145deg, oklch(0.30 0.075 276), oklch(0.17 0.035 260));
+}
+
+.course-cover::before,
+.course-cover::after {
+  position: absolute;
+  content: "";
+  border: 1px solid color-mix(in oklab, var(--primary) 33%, transparent);
+  border-radius: 999px;
+}
+
+.course-cover::before {
+  top: -70px;
+  right: -90px;
+  width: 280px;
+  height: 280px;
+}
+
+.course-cover::after {
+  right: 34px;
+  bottom: -90px;
+  width: 210px;
+  height: 210px;
+}
+
+.ai-media-hero h2 {
+  font-family: "Noto Serif SC", serif;
+}
+
+.ai-marker {
+  position: relative;
+  z-index: 0;
+  display: inline-block;
+  margin-left: 0.08em;
+  color: var(--foreground);
+}
+
+.ai-marker::after {
+  position: absolute;
+  z-index: -1;
+  right: -0.05em;
+  bottom: 0.02em;
+  left: -0.05em;
+  height: 0.34em;
+  content: "";
+  border-radius: 999px;
+  background: var(--primary);
+  opacity: 0.52;
+  transform: rotate(-1.5deg);
+}
+
+.ai-orbit {
+  position: absolute;
+  border: 1px solid color-mix(in oklab, var(--primary) 32%, transparent);
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+.ai-orbit-one {
+  top: -120px;
+  right: -80px;
+  width: 360px;
+  height: 360px;
+}
+
+.ai-orbit-two {
+  top: -58px;
+  right: -18px;
+  width: 230px;
+  height: 230px;
+}
+
+.knowledge-card {
+  box-shadow: 0 1px 0 color-mix(in oklab, var(--foreground) 3%, transparent);
+  transition: border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.knowledge-card:hover {
+  border-color: color-mix(in oklab, var(--primary) 42%, var(--border));
+  box-shadow: 0 24px 58px color-mix(in oklab, var(--primary) 7%, transparent);
+}
+
+.prompt-window {
+  position: relative;
+}
+
+.prompt-fade {
+  position: absolute;
+  right: 0;
+  bottom: 45px;
+  left: 0;
+  height: 110px;
+  background: linear-gradient(to bottom, transparent, var(--background));
+}
+
+@media (max-width: 767px) {
+  .ai-media-shell {
+    background-size: 28px 28px;
+  }
+
 }
